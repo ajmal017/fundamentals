@@ -130,5 +130,40 @@ class Display:
         print(shEquity)
         print(cashFlow)
 
-temp  = Display()
-temp.display_financials('amzn')
+    def display_earnings(self, index):
+        data = self.mIexData.get_earnings(index)
+        if data == []:
+            print("Error, could not read data")
+            return
+
+        quarter = "Quarter"
+        actual = "Actual"
+        estimated = "Est."
+
+        for earning in data['earnings']:
+            # When data is none, then fill with dash
+            if earning['actualEPS'] is None:
+                actual += '\t' + '-' + '\t'
+            else:
+                actual += '\t' + "{0:.2f}".format(earning['actualEPS'])
+            if earning['estimatedEPS'] is None:
+                estimated += '\t' + '-' + '\t'
+            else:
+                estimated += '\t' + "{0:.2f}".format(earning['estimatedEPS'])
+
+            temp_q = list(earning['fiscalPeriod'])
+            # Q1 2017 becomes Q1'17
+            if len(temp_q) > 3:
+                temp_q.pop(len(temp_q) - 3)
+                temp_q.pop(len(temp_q) - 3)
+                temp_q[len(temp_q) - 3] = "'"
+
+            quarter += '\t' + "".join(temp_q)
+
+        print(quarter)
+        print(actual)
+        print(estimated)
+
+
+temp = Display()
+temp.display_earnings('amzn')
