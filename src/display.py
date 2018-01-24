@@ -164,6 +164,12 @@ class Display:
         print(actual)
         print(estimated)
 
+    def display_stats(self, index):
+        data = self.mIexData.get_stats(index)
+        if data == []:
+            print("Error, could not read data")
+            return
 
-temp = Display()
-temp.display_earnings('amzn')
+        print("Name\t" + data['companyName'])
+        print("MC  \t" + format_cap(data['marketcap']))
+        print("Beta\t" + "{0:.2f}".format(data['beta']))
